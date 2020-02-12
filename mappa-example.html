@@ -18,7 +18,7 @@ const options = {
   lat: 49.25,
   lng: -123.246,
   zoom: 3,
-  style: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+  style: "https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png"
 }
 
 function setup(){
@@ -37,9 +37,9 @@ function setup(){
 }
 
 function draw(){
-fill(44,0,2);
+fill(44, 0, 2);
 const ubc = myMap.latLngToPixel(49.25,-123.246);
-ellipse(ubc.x, ubc.y, 15, 15);
+rect(ubc.x, ubc.y, 15, 15);
 }
 
 // Draw the meteorites
