@@ -2,7 +2,7 @@
 
 
 <strong> <i> LAB 1 </i> </strong>
-<iframe src="https://al-1222.github.io/al-1222-web/lab1.html" height="1000" width="1000"></iframe>
+<iframe src="https://al-1222.github.io/al-1222-web/Lab.html" height="1000" width="1000"></iframe>
 
 <i>Leaflet Exercise</i>
 <iframe src="https://al-1222.github.io/al-1222-web/mappa-example.html" height="600" width="600"></iframe>
