@@ -1,0 +1,77 @@
+  function onEachTree(feature, layer) {
+       // does this tree even have a property named TAXA?
+       if (feature.properties && feature.properties.TAXA) {
+          layer.bindTooltip(feature.properties.TAXA);
+       }
+    }
+
+    function treePointToLayer(feature, latlng) {
+
+      // the next conditional lets us differentiate between the
+      // styling we use when we are highlighting a particular taxa
+      // of trees versus when we are displaying all trees.
+
+      if (taxaToHighlight === "") {
+        treeMarkerOptionsToUse = treeMarkerOptions;
+      } else {
+        treeMarkerOptionsToUse = treeMarkerHighlightedOptions;
+      }
+
+      // for the current feature, make a circleMarker.
+      return L.circleMarker(
+        latlng,
+        treeMarkerOptionsToUse
+      );
+    }
+
+    function treesToFilter (feature, layer) {
+      if(taxaToHighlight === "") {
+        return true;
+        // In this case, we're not highlighting anything, so draw everything.
+      }
+      else if (feature.properties && feature.properties.TAXA) {
+        // We just checked to make sure there are properties to avoid an error
+        //   by asking for the .TAXA when there are no properties.
+        // Now, we need to check to see if the .TAXA matches what we're
+        //   trying to highlight.
+        return feature.properties.TAXA.toLowerCase().includes(taxaToHighlight.toLowerCase());
+				// We ignore uppercase/lowercase differences.
+      } else {
+        return false;
+        // This is for features that lack properties.
+        // Don't display them.
+      }
+    }
+
+ 		var lastLayerAdded = {};
+    // Keeping track of lastLayerAdded lets us reset the map layers
+    // being shown so we don’t keep on layering new data on old.
+
+    function addTrees() {
+      if(map.hasLayer(lastLayerAdded)){  // reset the map layers if relevant.
+        map.removeLayer(lastLayerAdded);
+      }
+      lastLayerAdded = L.geoJSON(treeGeoJSONdata, {
+   												pointToLayer: treePointToLayer,
+                 				  onEachFeature: onEachTree,
+          								filter: treesToFilter
+        										// filter out trees we aren't looking for,
+        										//   if any.
+      									 }
+                       );
+      lastLayerAdded.addTo(map);
+    };
+
+    var taxaToHighlight = "";
+    // This is set by someone pressing the highlight button.
+    // If it's an empty string, then just draw everything.
+
+    function highlightTrees() {
+      taxaToHighlight = document
+    												.getElementById("highlightTreesTextEntry")
+      											.value;  // get any text from the input box.
+      addTrees(); // add the trees.
+      taxaToHighlight = "";  // reset so that "Show All Trees" works.
+    }
+
+		var icedata; // Where we store tree GeoJSON data
